@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.items
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: RoomViewModel = viewModel()) {
+fun HomeScreen(viewModel: RoomViewModel) {
     val roomList by viewModel.roomList.collectAsState()
 
     Scaffold(
