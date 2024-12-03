@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,4 +41,10 @@ fun HomeScreen(viewModel: RoomViewModel) {
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen(viewModel = RoomViewModel())
 }
