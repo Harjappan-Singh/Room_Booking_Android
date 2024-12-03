@@ -9,12 +9,50 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.tooling.preview.Preview
 
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun HomeScreen(viewModel: RoomViewModel) {
+//    val roomList by viewModel.roomList.collectAsState()
+//
+//    Scaffold(
+//        topBar = {
+//            SmallTopAppBar(
+//                title = { Text("Booked Rooms") },
+//                colors = TopAppBarDefaults.smallTopAppBarColors()
+//            )
+//        }
+//    ) { innerPadding ->
+//        LazyColumn(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
+//            items(roomList) { room ->
+//                ElevatedCard(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = 8.dp)
+//                ) {
+//                    Column(
+//                        modifier = Modifier.padding(16.dp)
+//                    ) {
+//                        Text(text = "Room ID: ${room.id}", style = MaterialTheme.typography.titleMedium)
+//                        Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
+
 @OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HomeScreen(viewModel: RoomViewModel) {
+    // Collect room list state from ViewModel
     val roomList by viewModel.roomList.collectAsState()
+
+    // Define a loading state
+    val isLoading = roomList.isEmpty()
 
     Scaffold(
         topBar = {
@@ -24,24 +62,50 @@ fun HomeScreen(viewModel: RoomViewModel) {
             )
         }
     ) { innerPadding ->
-        LazyColumn(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-            items(roomList) { room ->
-                ElevatedCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
+        // Show a loading indicator while the data is being fetched
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator() // Show a loading spinner
+            }
+        } else {
+            // Show the room list once the data is available
+            LazyColumn(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
+                items(roomList) { room ->
+                    ElevatedCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
                     ) {
-                        Text(text = "Room ID: ${room.id}", style = MaterialTheme.typography.titleMedium)
-                        Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
+                        Column(
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(text = "Room ID: ${room.id}", style = MaterialTheme.typography.titleMedium)
+                            Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                 }
             }
         }
+
+        // Optional: Error or empty state message
+        if (roomList.isEmpty() && !isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No rooms available or error fetching data", style = MaterialTheme.typography.bodyMedium)
+            }
+        }
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
