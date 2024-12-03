@@ -62,8 +62,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val currentScreen by appViewModel.currentScreen.collectAsState()
+            val isAppLoading by appViewModel.isAppLoading.collectAsState()
 
             when (currentScreen) {
+                "Splash" -> {
+                    if (isAppLoading) SplashScreen()
+                }
                 "Login" -> {
                     LoginWithButtonAndImage(
                         modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
@@ -72,12 +76,7 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 "Home" -> {
-                    val isLoading by roomViewModel.isLoading.collectAsState()
-                    if (isLoading) {
-                        SplashScreen()
-                    } else {
-                        HomeScreen(roomViewModel)
-                    }
+                    HomeScreen(roomViewModel)
                 }
                 "Register" -> {
                     Text("Registration Screen - Under Construction")
@@ -86,4 +85,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
