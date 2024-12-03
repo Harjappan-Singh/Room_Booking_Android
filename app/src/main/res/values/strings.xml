@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Space Reserve</string>
+    <string name="login">Log In</string>
+    <string name="register">Register</string>
 </resources>
