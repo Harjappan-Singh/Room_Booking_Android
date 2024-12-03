@@ -18,33 +18,68 @@ import com.example.roombooking.view.LoginWithButtonAndImage
 import com.example.roombooking.view.SplashScreen
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.ui.Modifier
+import com.example.roombooking.viewmodel.AppViewModel
+
+
+//class MainActivity : ComponentActivity() {
+//    private val roomViewModel: RoomViewModel by viewModels()
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        setContent {
+//            var currentScreen by remember { mutableStateOf("Login") } // Tracks the current screen
+//
+//            when (currentScreen) {
+//                "Login" -> {
+//                    LoginWithButtonAndImage(
+//                        modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
+//                        onLoginClicked = { currentScreen = "Home" },
+//                        onRegisterClicked = { currentScreen = "Register" }
+//                    )
+//                }
+//                "Home" -> {
+//                    val isLoading = roomViewModel.isLoading.collectAsState()
+//                    if (isLoading.value) {
+//                        SplashScreen()
+//                    } else {
+//                        HomeScreen(roomViewModel)
+//                    }
+//                }
+//                "Register" -> {
+//                    // You could navigate to another composable for user registration if needed.
+//                    Text("Registration Screen - Under Construction")
+//                }
+//            }
+//        }
+//    }
+//}
 
 class MainActivity : ComponentActivity() {
+    private val appViewModel: AppViewModel by viewModels()
     private val roomViewModel: RoomViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var currentScreen by remember { mutableStateOf("Login") } // Tracks the current screen
+            val currentScreen by appViewModel.currentScreen.collectAsState()
 
             when (currentScreen) {
                 "Login" -> {
                     LoginWithButtonAndImage(
                         modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
-                        onLoginClicked = { currentScreen = "Home" },
-                        onRegisterClicked = { currentScreen = "Register" }
+                        onLoginClicked = { appViewModel.navigateTo("Home") },
+                        onRegisterClicked = { appViewModel.navigateTo("Register") }
                     )
                 }
                 "Home" -> {
-                    val isLoading = roomViewModel.isLoading.collectAsState()
-                    if (isLoading.value) {
+                    val isLoading by roomViewModel.isLoading.collectAsState()
+                    if (isLoading) {
                         SplashScreen()
                     } else {
                         HomeScreen(roomViewModel)
                     }
                 }
                 "Register" -> {
-                    // You could navigate to another composable for user registration if needed.
                     Text("Registration Screen - Under Construction")
                 }
             }
