@@ -7,9 +7,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class AppViewModel : ViewModel() {
-    private val _currentScreen = MutableStateFlow("Splash")
-    val currentScreen: StateFlow<String> get() = _currentScreen
-
     private val _isAppLoading = MutableStateFlow(true)
     val isAppLoading: StateFlow<Boolean> get() = _isAppLoading
 
@@ -21,11 +18,6 @@ class AppViewModel : ViewModel() {
         viewModelScope.launch {
             delay(3000)
             _isAppLoading.value = false
-            _currentScreen.value = "LoginRegister"
         }
-    }
-
-    fun navigateTo(screen: String) {
-        _currentScreen.value = screen
     }
 }

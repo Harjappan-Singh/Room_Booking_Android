@@ -9,10 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.example.roombooking.R
+import com.example.roombooking.navigation.Routes
+
 @Composable
-fun SplashScreen() {
+fun SplashScreen(navController: NavController, isAppLoading: Boolean) {
+    if (!isAppLoading) {
+        navController.navigate(Routes.LoginRegister) {
+            popUpTo(Routes.Splash) { inclusive = true }
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -33,8 +41,3 @@ fun SplashScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun SplashScreenPreview() {
-    SplashScreen()
-}
