@@ -18,41 +18,9 @@ import com.example.roombooking.view.LoginWithButtonAndImage
 import com.example.roombooking.view.SplashScreen
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.ui.Modifier
+import com.example.roombooking.view.LoginScreen
+import com.example.roombooking.view.RegisterScreen
 import com.example.roombooking.viewmodel.AppViewModel
-
-
-//class MainActivity : ComponentActivity() {
-//    private val roomViewModel: RoomViewModel by viewModels()
-//
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContent {
-//            var currentScreen by remember { mutableStateOf("Login") } // Tracks the current screen
-//
-//            when (currentScreen) {
-//                "Login" -> {
-//                    LoginWithButtonAndImage(
-//                        modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
-//                        onLoginClicked = { currentScreen = "Home" },
-//                        onRegisterClicked = { currentScreen = "Register" }
-//                    )
-//                }
-//                "Home" -> {
-//                    val isLoading = roomViewModel.isLoading.collectAsState()
-//                    if (isLoading.value) {
-//                        SplashScreen()
-//                    } else {
-//                        HomeScreen(roomViewModel)
-//                    }
-//                }
-//                "Register" -> {
-//                    // You could navigate to another composable for user registration if needed.
-//                    Text("Registration Screen - Under Construction")
-//                }
-//            }
-//        }
-//    }
-//}
 
 class MainActivity : ComponentActivity() {
     private val appViewModel: AppViewModel by viewModels()
@@ -68,18 +36,33 @@ class MainActivity : ComponentActivity() {
                 "Splash" -> {
                     if (isAppLoading) SplashScreen()
                 }
-                "Login" -> {
+                "LoginRegister" -> {
                     LoginWithButtonAndImage(
                         modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center),
-                        onLoginClicked = { appViewModel.navigateTo("Home") },
+                        onLoginClicked = { appViewModel.navigateTo("Login") },
                         onRegisterClicked = { appViewModel.navigateTo("Register") }
+                    )
+                }
+                "Login" -> {
+                    LoginScreen(
+                        onLoginClicked = { studentId, password ->
+                            // TODO validation logic to check student exist in database
+                            appViewModel.navigateTo("Home")
+                        },
+                        onBackClicked = { appViewModel.navigateTo("LoginRegister") }
+                    )
+                }
+                "Register" -> {
+                    RegisterScreen(
+                        onRegisterClicked = { name, studentId, password ->
+                        // TODO validation logic and store student in database
+                        appViewModel.navigateTo("Home")
+                    },
+                        onBackClicked = { appViewModel.navigateTo("LoginRegister") }
                     )
                 }
                 "Home" -> {
                     HomeScreen(roomViewModel)
-                }
-                "Register" -> {
-                    Text("Registration Screen - Under Construction")
                 }
             }
         }

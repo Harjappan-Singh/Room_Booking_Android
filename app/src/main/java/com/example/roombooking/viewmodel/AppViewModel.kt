@@ -21,7 +21,7 @@ class AppViewModel : ViewModel() {
         viewModelScope.launch {
             delay(3000)
             _isAppLoading.value = false
-            _currentScreen.value = "Login"
+            _currentScreen.value = "LoginRegister"
         }
     }
 
