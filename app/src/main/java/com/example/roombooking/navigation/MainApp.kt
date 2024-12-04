@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
-    val navController = rememberNavController()
+    val navController =     rememberNavController()
     val isAppLoading by appViewModel.isAppLoading.collectAsState()
 
     NavHost(
