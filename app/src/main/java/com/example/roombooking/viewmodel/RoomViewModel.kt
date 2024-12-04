@@ -8,22 +8,6 @@ import com.example.roombooking.model.Room
 import com.example.roombooking.model.RoomRepository
 import kotlinx.coroutines.launch
 
-//class RoomViewModel : ViewModel() {
-//
-//    private val _roomList = MutableStateFlow<List<Room>>(emptyList())
-//    val roomList: StateFlow<List<Room>> get() = _roomList
-//
-//    init {
-//        fetchRooms()
-//    }
-//
-//    private fun fetchRooms() {
-//        viewModelScope.launch {
-//            _roomList.value = RoomRepository.getRooms()
-//        }
-//    }
-//}
-
 
 class RoomViewModel : ViewModel() {
 

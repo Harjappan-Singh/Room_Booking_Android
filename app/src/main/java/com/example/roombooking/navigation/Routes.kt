@@ -8,4 +8,5 @@ object Routes {
     const val Home = "home"
     const val Settings = "settings"
     const val BookRoom = "book_room"
+    const val Students = "students"
 }

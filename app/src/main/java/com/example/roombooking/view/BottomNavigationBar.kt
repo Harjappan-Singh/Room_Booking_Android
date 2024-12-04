@@ -3,6 +3,7 @@ package com.example.roombooking.view
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -15,7 +16,7 @@ fun BottomNavigationBar(navController: NavController) {
         Routes.Home to Icons.Default.Home,
         Routes.BookRoom to Icons.Default.AccountBox,
         Routes.Settings to Icons.Default.Settings,
-
+        Routes.Students to Icons.Default.Person
     )
 
     NavigationBar {

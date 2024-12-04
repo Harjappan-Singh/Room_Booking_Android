@@ -12,9 +12,11 @@ import com.example.roombooking.viewmodel.AppViewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.example.roombooking.model.Student
+import com.example.roombooking.viewmodel.StudentViewModel
 
 @Composable
-fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
+fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentViewModel: StudentViewModel) {
     val navController = rememberNavController()
     val isAppLoading by appViewModel.isAppLoading.collectAsState()
 
@@ -32,13 +34,14 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
         }
         composable(Routes.Login) {
             LoginScreen(
-                onLoginClicked = { _, _ -> navController.navigate(Routes.Home) },
+                studentViewModel = studentViewModel, // Pass studentViewModel here
+                onLoginClicked = { navController.navigate(Routes.Home) },
                 onBackClicked = { navController.popBackStack() }
             )
         }
         composable(Routes.Register) {
             RegisterScreen(
-                onRegisterClicked = { _, _, _ -> navController.navigate(Routes.Home) },
+                studentViewModel = studentViewModel, // Pass the ViewModel
                 onBackClicked = { navController.popBackStack() }
             )
         }
@@ -63,6 +66,14 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
                 bottomBar = { BottomNavigationBar(navController) }
             ) { contentPadding ->
                 BookRoomScreen(contentPadding)
+            }
+        }
+
+        composable(Routes.Students) {
+            Scaffold(
+                bottomBar = { BottomNavigationBar(navController) }
+            ) { contentPadding ->
+                StudentsScreen(studentViewModel = studentViewModel, navController = navController, contentPadding)
             }
         }
     }
