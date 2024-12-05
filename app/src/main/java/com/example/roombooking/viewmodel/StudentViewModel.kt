@@ -36,6 +36,17 @@ class StudentViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun deleteStudent(studentId: String, onResult: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                studentDao.deleteStudent(studentId)
+                onResult(true)
+            } catch (e: Exception) {
+                onResult(false)
+            }
+        }
+    }
+
 }
 
 

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -22,9 +23,14 @@ import com.example.roombooking.model.Student
 import com.example.roombooking.viewmodel.StudentViewModel
 
 @Composable
-fun StudentsScreen(studentViewModel: StudentViewModel, navController: NavHostController, paddingValues: PaddingValues) {
+fun StudentsScreen(
+    studentViewModel: StudentViewModel,
+    navController: NavHostController,
+    paddingValues: PaddingValues
+) {
     var students by remember { mutableStateOf<List<Student>>(emptyList()) }
 
+    // Fetch students from the database
     LaunchedEffect(Unit) {
         studentViewModel.getAllStudents { studentList ->
             students = studentList
@@ -44,24 +50,35 @@ fun StudentsScreen(studentViewModel: StudentViewModel, navController: NavHostCon
             modifier = Modifier.padding(16.dp)
         )
 
-        if (students.isNotEmpty()) {
-            students.forEach { student ->
-                Text("ID: ${student.studentId}, Name: ${student.name}")
-                Spacer(modifier = Modifier.height(8.dp))
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            contentPadding = PaddingValues(16.dp)
+        ) {
+            items(students) { student ->
+                StudentCard(
+                    student = student,
+                    onDelete = { studentId ->
+                        studentViewModel.deleteStudent(studentId) { success ->
+                            if (success) {
+                                students = students.filter { it.studentId != studentId }
+                            }
+                        }
+                    }
+                )
             }
-        } else {
-            Text("No students registered.")
         }
 
-        Spacer(modifier = Modifier.weight(1f)) // Push the button to the bottom
+        Spacer(modifier = Modifier.weight(1f))
 
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth(0.5f) // Make the button take up half the width
+                .fillMaxWidth(0.5f)
         ) {
             Text("Back")
         }
     }
 }
+
