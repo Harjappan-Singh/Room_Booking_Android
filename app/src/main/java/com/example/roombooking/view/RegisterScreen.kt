@@ -13,7 +13,8 @@ import com.example.roombooking.viewmodel.StudentViewModel
 @Composable
 fun RegisterScreen(
     studentViewModel: StudentViewModel,
-    onBackClicked: () -> Unit
+    onBackClicked: () -> Unit,
+    onRegisterSuccess: () -> Unit
 ) {
     var studentName by remember { mutableStateOf("") }
     var studentId by remember { mutableStateOf("") }
@@ -25,7 +26,7 @@ fun RegisterScreen(
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let { message ->
             snackbarHostState.showSnackbar(message)
-            snackbarMessage = null // Reset message after showing
+            snackbarMessage = null
         }
     }
 
@@ -63,12 +64,21 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(onClick = {
-            val newStudent = Student(studentId = studentId, name = studentName, password = password)
-            studentViewModel.registerStudent(newStudent) { success ->
-                snackbarMessage = if (success) {
-                    "Registered successfully!"
-                } else {
-                    "Registration failed!"
+            when {
+                studentName.isBlank() -> snackbarMessage = "Full Name is required!"
+                studentId.isBlank() -> snackbarMessage = "Student ID is required!"
+                password.isBlank() -> snackbarMessage = "Password is required!"
+                password.length < 6 -> snackbarMessage = "Password must be at least 6 characters!"
+                else -> {
+                    val newStudent = Student(studentId = studentId, name = studentName, password = password)
+                    studentViewModel.registerStudent(newStudent) { success ->
+                        if (success) {
+                            snackbarMessage = "Registered successfully!"
+                            onRegisterSuccess()
+                        } else {
+                            snackbarMessage = "Registration failed!"
+                        }
+                    }
                 }
             }
         }) {
@@ -82,8 +92,7 @@ fun RegisterScreen(
         }
     }
 
-    // Display Snackbar at the bottom
-    Box(modifier = Modifier.fillMaxSize()){
+    Box(modifier = Modifier.fillMaxSize()) {
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier
@@ -91,7 +100,6 @@ fun RegisterScreen(
                 .padding(16.dp)
         )
     }
-
 }
 
 

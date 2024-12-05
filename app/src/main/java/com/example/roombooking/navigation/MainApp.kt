@@ -41,8 +41,9 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
         }
         composable(Routes.Register) {
             RegisterScreen(
-                studentViewModel = studentViewModel, // Pass the ViewModel
-                onBackClicked = { navController.popBackStack() }
+                studentViewModel = studentViewModel,
+                onBackClicked = { navController.popBackStack() },
+                onRegisterSuccess = { navController.navigate(Routes.Home) }
             )
         }
         composable(Routes.Home) {
