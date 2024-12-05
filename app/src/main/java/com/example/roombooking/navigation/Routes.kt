@@ -9,4 +9,5 @@ object Routes {
     const val Settings = "settings"
     const val BookRoom = "book_room"
     const val DisplayDate = "display_date"
+    const val Students = "students"
 }

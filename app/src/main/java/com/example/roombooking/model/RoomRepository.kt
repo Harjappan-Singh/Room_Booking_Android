@@ -1,26 +1,33 @@
 package com.example.roombooking.model
+
+import android.util.Log
 import com.example.roombooking.network.RetrofitInstance
 import com.example.roombooking.model.Room
 import com.example.roombooking.network.RoomApi
+import java.net.UnknownHostException
 
-//object RoomRepository {
-//    fun getRooms(): List<Room> {
-//        return listOf(
-//            Room("P1105", "available"),
-//            Room("P1107", "booked"),
-//            Room("P1108", "available")
-//        )
-//    }
-//}
+class RoomRepository {
 
-object RoomRepository {
     suspend fun getRooms(date: String): List<Room> {
-        val apiResponse = RetrofitInstance.api.getRoomAvailability(date)
-        val roomData = apiResponse[date] ?: emptyList()
+        try {
+            Log.d("RoomRepository", "Fetching rooms for date: $date")
 
-        return roomData.map { roomEntry ->
-            val (id, status) = roomEntry.entries.first() // Unpack the key-value pair
-            Room(id, status)
+            // Fetch the API response
+            val fullUrl = "https://reserve-space-api.onrender.com/room_availability?date=2024-12-01"
+            val apiResponse = RetrofitInstance.api.testApiWithFullUrl(fullUrl)
+
+
+            //val apiResponse = RetrofitInstance.api.getRoomAvailability(date)
+            Log.d("RoomRepository", "Fetching rooms for date: $date")
+            Log.d("RoomRepository", "API Response: $apiResponse")
+
+            // Filter only available rooms
+            return apiResponse.rooms.filter { room ->
+                room.status == "Available"
+            }
+        } catch (e: Exception) {
+            Log.e("RoomRepository", "Error fetching rooms: ${e.message}", e)
+            throw e
         }
     }
 }

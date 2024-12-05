@@ -1,6 +1,8 @@
 package com.example.roombooking.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -12,13 +14,16 @@ import com.example.roombooking.viewmodel.AppViewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.example.roombooking.model.Student
+import com.example.roombooking.viewmodel.StudentViewModel
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
 @Composable
-fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
+fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentViewModel: StudentViewModel) {
     val navController = rememberNavController()
     val isAppLoading by appViewModel.isAppLoading.collectAsState()
+    val studentId = studentViewModel.getStudentId() ?: "d00253215"
 
     NavHost(
         navController = navController,
@@ -34,14 +39,16 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
         }
         composable(Routes.Login) {
             LoginScreen(
-                onLoginClicked = { _, _ -> navController.navigate(Routes.Home) },
+                studentViewModel = studentViewModel,
+                onLoginSuccess = { navController.navigate(Routes.Home) },
                 onBackClicked = { navController.popBackStack() }
             )
         }
         composable(Routes.Register) {
             RegisterScreen(
-                onRegisterClicked = { _, _, _ -> navController.navigate(Routes.Home) },
-                onBackClicked = { navController.popBackStack() }
+                studentViewModel = studentViewModel,
+                onBackClicked = { navController.popBackStack() },
+                onRegisterSuccess = { navController.navigate(Routes.Home) }
             )
         }
         composable(Routes.Home) {
@@ -52,11 +59,19 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
             }
         }
 
+
         composable(Routes.Settings) {
             Scaffold(
                 bottomBar = { BottomNavigationBar(navController) }
             ) { contentPadding ->
-                SettingsScreen(contentPadding)
+                SettingsScreen(
+                    studentViewModel = studentViewModel,
+                    studentId = studentId,
+                    onAccountDeleted = {
+                        navController.navigate(Routes.Login)
+                    },
+                    paddingValues = contentPadding
+                )
             }
         }
 
@@ -81,7 +96,18 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
             Scaffold(
                 bottomBar = { BottomNavigationBar(navController) }
             ) { contentPadding ->
-                DisplayDateScreen(date = date)
+//                DisplayDateScreen(date = date)
+                Box(modifier = Modifier.padding(contentPadding)) {
+                    DisplayDateScreen(date = date)
+                }
+            }
+        }
+
+        composable(Routes.Students) {
+            Scaffold(
+                bottomBar = { BottomNavigationBar(navController) }
+            ) { contentPadding ->
+                StudentsScreen(studentViewModel = studentViewModel, navController = navController, contentPadding)
             }
         }
     }
