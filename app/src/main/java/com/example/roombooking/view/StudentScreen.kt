@@ -30,7 +30,6 @@ fun StudentsScreen(
 ) {
     var students by remember { mutableStateOf<List<Student>>(emptyList()) }
 
-    // Fetch students from the database
     LaunchedEffect(Unit) {
         studentViewModel.getAllStudents { studentList ->
             students = studentList
@@ -58,14 +57,13 @@ fun StudentsScreen(
             items(students) { student ->
                 StudentCard(
                     student = student,
-                    onDelete = { studentId ->
-                        studentViewModel.deleteStudent(studentId) { success ->
-                            if (success) {
-                                students = students.filter { it.studentId != studentId }
-                            }
+                    onDelete = {
+                        studentViewModel.deleteStudent {
+                            students = students.filter { it.studentId != student.studentId }
                         }
                     }
                 )
+
             }
         }
 

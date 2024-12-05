@@ -19,6 +19,7 @@ import com.example.roombooking.viewmodel.StudentViewModel
 fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentViewModel: StudentViewModel) {
     val navController = rememberNavController()
     val isAppLoading by appViewModel.isAppLoading.collectAsState()
+    val studentId = studentViewModel.getStudentId() ?: "d00253215"
 
     NavHost(
         navController = navController,
@@ -54,11 +55,19 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
             }
         }
 
+
         composable(Routes.Settings) {
             Scaffold(
                 bottomBar = { BottomNavigationBar(navController) }
             ) { contentPadding ->
-                SettingsScreen(contentPadding)
+                SettingsScreen(
+                    studentViewModel = studentViewModel,
+                    studentId = studentId,
+                    onAccountDeleted = {
+                        navController.navigate(Routes.Login)
+                    },
+                    paddingValues = contentPadding
+                )
             }
         }
 
