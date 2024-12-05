@@ -34,8 +34,8 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
         }
         composable(Routes.Login) {
             LoginScreen(
-                studentViewModel = studentViewModel, // Pass studentViewModel here
-                onLoginClicked = { navController.navigate(Routes.Home) },
+                studentViewModel = studentViewModel,
+                onLoginSuccess = { navController.navigate(Routes.Home) },
                 onBackClicked = { navController.popBackStack() }
             )
         }
