@@ -12,6 +12,8 @@ import com.example.roombooking.viewmodel.AppViewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 @Composable
 fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
@@ -62,7 +64,24 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel) {
             Scaffold(
                 bottomBar = { BottomNavigationBar(navController) }
             ) { contentPadding ->
-                BookRoomScreen(contentPadding)
+                BookRoomScreen(
+                    paddingValues = contentPadding,
+                    onDateSelected = { selectedDate ->
+                        navController.navigate("${Routes.DisplayDate}/$selectedDate")
+                    }
+                )
+            }
+        }
+
+        composable(
+            route = "${Routes.DisplayDate}/{date}",
+            arguments = listOf(navArgument("date") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val date = backStackEntry.arguments?.getString("date") ?: "No date selected"
+            Scaffold(
+                bottomBar = { BottomNavigationBar(navController) }
+            ) { contentPadding ->
+                DisplayDateScreen(date = date)
             }
         }
     }
