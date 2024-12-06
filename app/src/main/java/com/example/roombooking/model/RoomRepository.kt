@@ -13,11 +13,11 @@ class RoomRepository {
             Log.d("RoomRepository", "Fetching rooms for date: $date")
 
             // Fetch the API response
-            val fullUrl = "https://reserve-space-api.onrender.com/room_availability?date=2024-12-01"
-            val apiResponse = RetrofitInstance.api.testApiWithFullUrl(fullUrl)
+//            val fullUrl = "https://reserve-space-api.onrender.com/room_availability?date=2024-12-01"
+//            val apiResponse = RetrofitInstance.api.testApiWithFullUrl(fullUrl)
 
 
-            //val apiResponse = RetrofitInstance.api.getRoomAvailability(date)
+            val apiResponse = RetrofitInstance.api.getRoomAvailability(date)
             Log.d("RoomRepository", "Fetching rooms for date: $date")
             Log.d("RoomRepository", "API Response: $apiResponse")
 
