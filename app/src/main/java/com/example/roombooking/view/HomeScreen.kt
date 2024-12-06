@@ -13,18 +13,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: RoomViewModel, paddingValues: PaddingValues) {
-    val roomList by viewModel.roomList.collectAsState()
+fun HomeScreen(viewModel: RoomViewModel, studentId: String, paddingValues: PaddingValues) {
+    val bookingsList by viewModel.bookingsList.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
-    val isLoading = roomList.isEmpty()
+    LaunchedEffect(studentId) {
+        viewModel.fetchBookings(studentId)
+    }
 
     Scaffold(
         topBar = {
             SmallTopAppBar(
-                title = { Text("Booked Rooms") },
+                title = { Text("My Booked Rooms") },
                 colors = TopAppBarDefaults.smallTopAppBarColors()
             )
         }
@@ -36,18 +38,28 @@ fun HomeScreen(viewModel: RoomViewModel, paddingValues: PaddingValues) {
             bottom = innerPadding.calculateBottomPadding() + paddingValues.calculateBottomPadding()
         )
 
-        if (isLoading) {
+        if (errorMessage != null) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(combinedPadding),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator()
+                Text(text = errorMessage ?: "An error occurred")
+            }
+        } else if (bookingsList.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(combinedPadding),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("No bookings found")
             }
         } else {
             LazyColumn(modifier = Modifier.padding(combinedPadding).padding(16.dp)) {
-                items(roomList) { room ->
+                items(bookingsList) { booking ->
+                    val (date, roomId) = booking
                     ElevatedCard(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -56,23 +68,75 @@ fun HomeScreen(viewModel: RoomViewModel, paddingValues: PaddingValues) {
                         Column(
                             modifier = Modifier.padding(16.dp)
                         ) {
-                            Text(text = "Room ID: ${room.room_id}", style = MaterialTheme.typography.titleMedium)
-                            Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
+                            Text(text = "Room ID: $roomId", style = MaterialTheme.typography.titleMedium)
+                            Text(text = "Date: $date", style = MaterialTheme.typography.bodyMedium)
                         }
                     }
                 }
             }
         }
-
-        if (roomList.isEmpty() && !isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(combinedPadding),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("No rooms available or error fetching data", style = MaterialTheme.typography.bodyMedium)
-            }
-        }
     }
 }
+
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun HomeScreen(viewModel: RoomViewModel, paddingValues: PaddingValues) {
+//    val roomList by viewModel.roomList.collectAsState()
+//
+//    val isLoading = roomList.isEmpty()
+//
+//    Scaffold(
+//        topBar = {
+//            SmallTopAppBar(
+//                title = { Text("Booked Rooms") },
+//                colors = TopAppBarDefaults.smallTopAppBarColors()
+//            )
+//        }
+//    ) { innerPadding ->
+//        val combinedPadding = PaddingValues(
+//            start = innerPadding.calculateStartPadding(LocalLayoutDirection.current) + paddingValues.calculateStartPadding(LocalLayoutDirection.current),
+//            top = innerPadding.calculateTopPadding() + paddingValues.calculateTopPadding(),
+//            end = innerPadding.calculateEndPadding(LocalLayoutDirection.current) + paddingValues.calculateEndPadding(LocalLayoutDirection.current),
+//            bottom = innerPadding.calculateBottomPadding() + paddingValues.calculateBottomPadding()
+//        )
+//
+//        if (isLoading) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(combinedPadding),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                CircularProgressIndicator()
+//            }
+//        } else {
+//            LazyColumn(modifier = Modifier.padding(combinedPadding).padding(16.dp)) {
+//                items(roomList) { room ->
+//                    ElevatedCard(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(vertical = 8.dp)
+//                    ) {
+//                        Column(
+//                            modifier = Modifier.padding(16.dp)
+//                        ) {
+//                            Text(text = "Room ID: ${room.room_id}", style = MaterialTheme.typography.titleMedium)
+//                            Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        if (roomList.isEmpty() && !isLoading) {
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxSize()
+//                    .padding(combinedPadding),
+//                contentAlignment = Alignment.Center
+//            ) {
+//                Text("No rooms available or error fetching data", style = MaterialTheme.typography.bodyMedium)
+//            }
+//        }
+//    }
+//}

@@ -30,4 +30,38 @@ class RoomRepository {
             throw e
         }
     }
+
+    suspend fun bookRoom(roomId: String, date: String, studentId: String): Boolean {
+        try {
+            val response = RetrofitInstance.api.bookRoom(
+                mapOf(
+                    "room_id" to roomId,
+                    "date" to date,
+                    "student_id" to studentId
+                )
+            )
+            return response["success"] == true
+        } catch (e: Exception) {
+            Log.e("RoomRepository", "Error booking room: ${e.message}", e)
+            throw e
+        }
+    }
+
+    suspend fun getBookingsForStudent(studentId: String): List<Pair<String, String>> {
+        try {
+            val response = RetrofitInstance.api.getBookings(studentId)
+            Log.d("RoomRepository", "Bookings API Response: $response")
+
+            val bookings = response["bookings"] as? List<Map<String, String>> ?: emptyList()
+
+            return bookings.map { booking ->
+                val date = booking["date"] ?: "Unknown date"
+                val roomId = booking["room_id"] ?: "Unknown room"
+                date to roomId
+            }
+        } catch (e: Exception) {
+            Log.e("RoomRepository", "Error fetching bookings: ${e.message}", e)
+            throw e
+        }
+    }
 }

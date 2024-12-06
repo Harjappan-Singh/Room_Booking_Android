@@ -1,5 +1,6 @@
 package com.example.roombooking.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
@@ -14,11 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.roombooking.model.Room
 import com.example.roombooking.viewmodel.RoomViewModel
 
 @Composable
-fun DisplayDateScreen(date: String, roomViewModel: RoomViewModel = viewModel()) {
+fun DisplayDateScreen(date: String, roomViewModel: RoomViewModel = viewModel(), navController: NavController) {
     val roomList by roomViewModel.roomList.collectAsState()
     val errorMessage by roomViewModel.errorMessage.collectAsState()
 
@@ -32,12 +34,15 @@ fun DisplayDateScreen(date: String, roomViewModel: RoomViewModel = viewModel()) 
                 text = errorMessage!!,
                 modifier = Modifier.align(Alignment.Center)
             )
-            roomList.isEmpty() -> CircularProgressIndicator(
+            roomList.isEmpty() -> Text(
+                text = "No available rooms",
                 modifier = Modifier.align(Alignment.Center)
             )
             else -> LazyColumn(modifier = Modifier.padding(16.dp)) {
                 items(roomList) { room ->
-                    RoomItem(room)
+                    RoomItem(room) { selectedRoomId ->
+                        navController.navigate("confirmBooking/$selectedRoomId/$date")
+                    }
                 }
             }
         }
@@ -45,16 +50,56 @@ fun DisplayDateScreen(date: String, roomViewModel: RoomViewModel = viewModel()) 
 }
 
 @Composable
-fun RoomItem(room: Room) {
+fun RoomItem(room: Room, onClick: (String) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
+            .clickable { onClick(room.room_id) }
     ) {
         Text(text = "Room ID: ${room.room_id}")
         Text(text = "Status: ${room.status}")
-        if (room.student_id != null) {
-            Text(text = "Booked by Student ID: ${room.student_id}")
-        }
     }
 }
+
+//@Composable
+//fun DisplayDateScreen(date: String, roomViewModel: RoomViewModel = viewModel()) {
+//    val roomList by roomViewModel.roomList.collectAsState()
+//    val errorMessage by roomViewModel.errorMessage.collectAsState()
+//
+//    LaunchedEffect(date) {
+//        roomViewModel.fetchRooms(date)
+//    }
+//
+//    Box(modifier = Modifier.fillMaxSize()) {
+//        when {
+//            errorMessage != null -> Text(
+//                text = errorMessage!!,
+//                modifier = Modifier.align(Alignment.Center)
+//            )
+//            roomList.isEmpty() -> CircularProgressIndicator(
+//                modifier = Modifier.align(Alignment.Center)
+//            )
+//            else -> LazyColumn(modifier = Modifier.padding(16.dp)) {
+//                items(roomList) { room ->
+//                    RoomItem(room)
+//                }
+//            }
+//        }
+//    }
+//}
+//
+//@Composable
+//fun RoomItem(room: Room) {
+//    Column(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(8.dp)
+//    ) {
+//        Text(text = "Room ID: ${room.room_id}")
+//        Text(text = "Status: ${room.status}")
+//        if (room.student_id != null) {
+//            Text(text = "Booked by Student ID: ${room.student_id}")
+//        }
+//    }
+//}
