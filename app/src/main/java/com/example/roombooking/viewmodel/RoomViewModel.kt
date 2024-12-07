@@ -23,9 +23,13 @@ class RoomViewModel : ViewModel() {
     private val _bookingResult = MutableStateFlow<String?>(null)
     val bookingResult: StateFlow<String?> get() = _bookingResult
 
+//    // State for bookings specific to a student
+//    private val _bookingsList = MutableStateFlow<List<Pair<String, String>>>(emptyList())
+//    val bookingsList: StateFlow<List<Pair<String, String>>> get() = _bookingsList
+
     // State for bookings specific to a student
-    private val _bookingsList = MutableStateFlow<List<Pair<String, String>>>(emptyList())
-    val bookingsList: StateFlow<List<Pair<String, String>>> get() = _bookingsList
+    private val _bookingsList = MutableStateFlow<List<Room>>(emptyList()) // Change type to List<Room>
+    val bookingsList: StateFlow<List<Room>> get() = _bookingsList
 
     // Fetch rooms based on a specific date
     fun fetchRooms(date: String) {

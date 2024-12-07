@@ -47,17 +47,35 @@ class RoomRepository {
         }
     }
 
-    suspend fun getBookingsForStudent(studentId: String): List<Pair<String, String>> {
+//    suspend fun getBookingsForStudent(studentId: String): List<Pair<String, String>> {
+//        try {
+//            val response = RetrofitInstance.api.getBookings(studentId)
+//            Log.d("RoomRepository", "Bookings API Response: $response")
+//
+//            val bookings = response["bookings"] as? List<Map<String, String>> ?: emptyList()
+//
+//            return bookings.map { booking ->
+//                val date = booking["date"] ?: "Unknown date"
+//                val roomId = booking["room_id"] ?: "Unknown room"
+//                date to roomId
+//            }
+//        } catch (e: Exception) {
+//            Log.e("RoomRepository", "Error fetching bookings: ${e.message}", e)
+//            throw e
+//        }
+//    }
+    suspend fun getBookingsForStudent(studentId: String): List<Room> {
         try {
             val response = RetrofitInstance.api.getBookings(studentId)
-            Log.d("RoomRepository", "Bookings API Response: $response")
-
-            val bookings = response["bookings"] as? List<Map<String, String>> ?: emptyList()
+            val bookings = response["bookings"] as? List<Map<String, Any>> ?: emptyList()
 
             return bookings.map { booking ->
-                val date = booking["date"] ?: "Unknown date"
-                val roomId = booking["room_id"] ?: "Unknown room"
-                date to roomId
+                Room(
+                    room_id = booking["room_id"] as String,
+                    status = booking["status"] as String,
+                    student_id = studentId,
+                    image_url = booking["image_url"] as String
+                )
             }
         } catch (e: Exception) {
             Log.e("RoomRepository", "Error fetching bookings: ${e.message}", e)
