@@ -31,7 +31,7 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
     ) {
         composable(Routes.Splash) { SplashScreen(navController = navController, isAppLoading = isAppLoading) }
         composable(Routes.LoginRegister) {
-            LoginWithButtonAndImage(
+            LoginRegisterScreen(
                 onLoginClicked = { navController.navigate(Routes.Login) },
                 onRegisterClicked = { navController.navigate(Routes.Register) },
                 modifier = Modifier.fillMaxSize()

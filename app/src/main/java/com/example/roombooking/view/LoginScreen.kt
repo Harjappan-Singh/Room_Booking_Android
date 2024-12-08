@@ -1,11 +1,18 @@
 package com.example.roombooking.view
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.roombooking.viewmodel.StudentViewModel
+
 
 @Composable
 fun LoginScreen(
@@ -26,60 +33,93 @@ fun LoginScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF3064B8),
+                        Color(0xFFAAE5FF)
+                    )
+                )
+            )
+            .padding(16.dp)
     ) {
-        Text(
-            text = "Login",
-            style = MaterialTheme.typography.headlineLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = "Login to Space Reserve",
+                color = Color.White,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
+            InputField(
+                value = studentId,
+                label = "Student ID",
+                onValueChange = { studentId = it },
+                modifier = Modifier.fillMaxWidth(0.9f)
+            )
 
-        InputField(value = studentId, label = "Student ID") {
-            studentId = it
-        }
+            InputField(
+                value = password,
+                label = "Password",
+                isPassword = true,
+                onValueChange = { password = it },
+                modifier = Modifier.fillMaxWidth(0.9f)
+            )
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        InputField(value = password, label = "Password", isPassword = true) {
-            password = it
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            when {
-                studentId.isBlank() -> snackbarMessage = "Student ID is required!"
-                password.isBlank() -> snackbarMessage = "Password is required!"
-                else -> {
-                    studentViewModel.validateStudent(studentId, password) { success ->
-                        if (success) {
-                            snackbarMessage = "Login successful!"
-                            onLoginSuccess()
-                        } else {
-                            snackbarMessage = "Invalid credentials!"
+            Button(
+                onClick = {
+                    when {
+                        studentId.isBlank() -> snackbarMessage = "Student ID is required!"
+                        password.isBlank() -> snackbarMessage = "Password is required!"
+                        else -> {
+                            studentViewModel.validateStudent(studentId, password) { success ->
+                                if (success) {
+                                    snackbarMessage = "Login successful!"
+                                    onLoginSuccess()
+                                } else {
+                                    snackbarMessage = "Invalid credentials!"
+                                }
+                            }
                         }
                     }
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color(0xFF3064B8)
+                ),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text("Log In", fontSize = 18.sp, fontWeight = FontWeight.Medium)
             }
-        }) {
-            Text("Log In")
+
+            Button(
+                onClick = { onBackClicked() },
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF3064B8),
+                    contentColor = Color.White
+                ),
+                shape = MaterialTheme.shapes.medium
+            ) {
+                Text("Back", fontSize = 18.sp, fontWeight = FontWeight.Medium)
+            }
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = { onBackClicked() }) {
-            Text("Back")
-        }
-    }
-
-    Box(modifier = Modifier.fillMaxSize()) {
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier
@@ -88,51 +128,3 @@ fun LoginScreen(
         )
     }
 }
-
-
-//@Composable
-//fun LoginScreen(
-//    onLoginClicked: (String, String) -> Unit = { _, _ -> },
-//    onBackClicked: () -> Unit = {}
-//) {
-//    var studentId by remember { mutableStateOf("") }
-//    var password by remember { mutableStateOf("") }
-//
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Center
-//    ) {
-//        Text(
-//            text = "Login",
-//            style = MaterialTheme.typography.headlineLarge,
-//            color = MaterialTheme.colorScheme.primary
-//        )
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        InputField(value = studentId, label = "Student ID") {
-//            studentId = it
-//        }
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        InputField(value = password, label = "Password", isPassword = true) {
-//            password = it
-//        }
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        Button(onClick = { onLoginClicked(studentId, password) }) {
-//            Text("Log In")
-//        }
-//
-//        Spacer(modifier = Modifier.height(16.dp))
-//
-//        Button(onClick = { onBackClicked() }) {
-//            Text("Back")
-//        }
-//    }
-//}
