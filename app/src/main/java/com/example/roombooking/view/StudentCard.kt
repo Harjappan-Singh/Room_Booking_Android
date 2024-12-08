@@ -1,10 +1,12 @@
 package com.example.roombooking.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.roombooking.model.Student
 
@@ -31,7 +33,7 @@ fun StudentCard(student: Student, onDelete: (String) -> Unit) {
 
             Button(
                 onClick = { onDelete(student.studentId) },
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF3064B8))
             ) {
                 Text("Delete")
             }

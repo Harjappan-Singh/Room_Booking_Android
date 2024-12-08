@@ -1,5 +1,6 @@
 package com.example.roombooking.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -11,6 +12,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
@@ -44,6 +48,15 @@ fun HomeScreen(viewModel: RoomViewModel, studentId: String, paddingValues: Paddi
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(combinedPadding)
+                .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF3064B8),
+                        Color(0xFFAAE5FF)
+                    )
+                )
+            )
                 .padding(combinedPadding)
         ) {
             val isCompact = maxWidth < 600.dp // Define breakpoint for compact layout
@@ -83,25 +96,42 @@ fun CompactLayout(roomList: List<Room>) {
             ElevatedCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp)
+                    .padding(vertical = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             ) {
-                Row(
-                    modifier = Modifier.padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    // Display the image
+                    // Image covering around 80% of the card
                     AsyncImage(
                         model = room.image_url,
                         contentDescription = "Room Image",
                         modifier = Modifier
-                            .size(64.dp)
-                            .padding(end = 16.dp)
+                            .fillMaxWidth()
+                            .height(200.dp) // Adjust image height
+                            .clip(MaterialTheme.shapes.medium)
+                            .align(Alignment.TopCenter) // Align image to top
                     )
-                    // Display room details
-                    Column {
-                        Text(text = "Room ID: ${room.room_id}", style = MaterialTheme.typography.titleMedium)
-                        Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
-                    }
+                    // Room ID on the bottom left
+                    Text(
+                        text = "Room ID: ${room.room_id}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                    )
+                    // Status on the bottom right
+                    Text(
+                        text = "Status: ${room.status}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp)
+                    )
                 }
             }
         }
@@ -119,79 +149,42 @@ fun ExpandedLayout(roomList: List<Room>) {
         items(roomList) { room ->
             ElevatedCard(
                 modifier = Modifier
-                    .width(200.dp) // Fixed card width for larger screens
-                    .padding(vertical = 8.dp)
+                    .width(200.dp)
+                    .padding(vertical = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             ) {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Box(
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    // Display the image
                     AsyncImage(
                         model = room.image_url,
                         contentDescription = "Room Image",
                         modifier = Modifier
-                            .size(128.dp)
-                            .padding(bottom = 16.dp)
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .align(Alignment.TopCenter)
                     )
-                    // Display room details
-                    Text(text = "Room ID: ${room.room_id}", style = MaterialTheme.typography.titleMedium)
-                    Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        text = "Room ID: ${room.room_id}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                    )
+                    Text(
+                        text = "Status: ${room.status}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp)
+                    )
                 }
             }
         }
     }
 }
-
-
-
-//@Composable
-//fun CompactLayout(roomList: List<Room>) {
-//    LazyColumn(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp)
-//    ) {
-//        items(roomList) { booking ->
-//            val (date, roomId) = booking
-//            ElevatedCard(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(vertical = 8.dp)
-//            ) {
-//                Column(
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    Text(text = "Room ID: $roomId", style = MaterialTheme.typography.titleMedium)
-//                    Text(text = "Date: $date", style = MaterialTheme.typography.bodyMedium)
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun ExpandedLayout(roomList: List<Room>) {
-//    LazyRow(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        horizontalArrangement = Arrangement.spacedBy(16.dp)
-//    ) {
-//        items(roomList) { booking ->
-//            val (date, roomId) = booking
-//            ElevatedCard(
-//                modifier = Modifier
-//                    .width(200.dp) // Fixed card width for larger screens
-//                    .padding(vertical = 8.dp)
-//            ) {
-//                Column(
-//                    modifier = Modifier.padding(16.dp)
-//                ) {
-//                    Text(text = "Room ID: $roomId", style = MaterialTheme.typography.titleMedium)
-//                    Text(text = "Date: $date", style = MaterialTheme.typography.bodyMedium)
-//                }
-//            }
-//        }
-//    }
-//}
