@@ -23,10 +23,6 @@ class RoomViewModel : ViewModel() {
     private val _bookingResult = MutableStateFlow<String?>(null)
     val bookingResult: StateFlow<String?> get() = _bookingResult
 
-//    // State for bookings specific to a student
-//    private val _bookingsList = MutableStateFlow<List<Pair<String, String>>>(emptyList())
-//    val bookingsList: StateFlow<List<Pair<String, String>>> get() = _bookingsList
-
     // State for bookings specific to a student
     private val _bookingsList = MutableStateFlow<List<Room>>(emptyList()) // Change type to List<Room>
     val bookingsList: StateFlow<List<Room>> get() = _bookingsList
@@ -67,39 +63,3 @@ class RoomViewModel : ViewModel() {
         }
     }
 }
-
-//class RoomViewModel : ViewModel() {
-//    private val repository = RoomRepository()
-//
-//    private val _roomList = MutableStateFlow<List<Room>>(emptyList())
-//    val roomList: StateFlow<List<Room>> get() = _roomList
-//
-//    private val _errorMessage = MutableStateFlow<String?>(null)
-//    val errorMessage: StateFlow<String?> get() = _errorMessage
-//
-//    fun fetchRooms(date: String) {
-//        viewModelScope.launch {
-//            try {
-//                _roomList.value = repository.getRooms(date)
-//                _errorMessage.value = null // Clear previous errors
-//            } catch (e: Exception) {
-//                _errorMessage.value = "Failed to load rooms: ${e.message}"
-//            }
-//        }
-//    }
-//
-//
-//    private val _bookingResult = MutableStateFlow<String?>(null)
-//    val bookingResult: StateFlow<String?> get() = _bookingResult
-//
-//    fun bookRoom(roomId: String, date: String, studentId: String) {
-//        viewModelScope.launch {
-//            try {
-//                val success = repository.bookRoom(roomId, date, studentId)
-//                _bookingResult.value = if (success) "Room booked successfully!" else "Failed to book room."
-//            } catch (e: Exception) {
-//                _bookingResult.value = "Error: ${e.message}"
-//            }
-//        }
-//    }
-//}

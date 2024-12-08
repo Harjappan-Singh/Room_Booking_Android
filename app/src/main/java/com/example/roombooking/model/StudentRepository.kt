@@ -19,8 +19,4 @@ object StudentRepository {
     suspend fun getAllStudents(): List<Student> {
         return studentDao.getAllStudents()
     }
-
-//    suspend fun getStudentById(studentId: String): Student? {
-//        return studentDao.getStudentById(studentId)
-//    }
 }

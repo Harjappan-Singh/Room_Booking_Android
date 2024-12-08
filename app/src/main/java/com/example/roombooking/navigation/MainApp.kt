@@ -51,13 +51,6 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
                 onRegisterSuccess = { navController.navigate(Routes.Home) }
             )
         }
-//        composable(Routes.Home) {
-//            Scaffold(
-//                bottomBar = { BottomNavigationBar(navController) }
-//            ) { contentPadding ->
-//                HomeScreen(roomViewModel, contentPadding)
-//            }
-//        }
 
         composable(Routes.Home) {
             Scaffold(
@@ -70,7 +63,6 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
                 )
             }
         }
-
 
         composable(Routes.Settings) {
             Scaffold(
@@ -152,30 +144,5 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
                 }
             }
         }
-
-//        composable(
-//            route = "confirmBooking/{roomId}/{date}",
-//            arguments = listOf(
-//                navArgument("roomId") { type = NavType.StringType },
-//                navArgument("date") { type = NavType.StringType }
-//            )
-//        ) { backStackEntry ->
-//            val roomId = backStackEntry.arguments?.getString("roomId") ?: ""
-//            val date = backStackEntry.arguments?.getString("date") ?: ""
-//            Scaffold(
-//                bottomBar = { BottomNavigationBar(navController) }
-//            ) { contentPadding ->
-//                Box(modifier = Modifier.padding(contentPadding)) {
-//                    ConfirmBookingScreen(
-//                        roomId = roomId,
-//                        date = date,
-//                        studentId = studentId,
-//                        onBookRoom = { selectedRoomId, selectedDate, studentId ->
-//                            roomViewModel.bookRoom(selectedRoomId, selectedDate, studentId)
-//                        }
-//                    )
-//                }
-//            }
-//        }
     }
 }

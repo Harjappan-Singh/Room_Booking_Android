@@ -10,5 +10,5 @@ object Routes {
     const val BookRoom = "book_room"
     const val DisplayDate = "display_date"
     const val Students = "students"
-    const val RoomConfirmation = "confirmBooking/{roomId}/{date}"
+    //const val RoomConfirmation = "confirmBooking/{roomId}/{date}"
 }
