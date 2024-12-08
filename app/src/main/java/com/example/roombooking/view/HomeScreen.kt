@@ -33,8 +33,8 @@ fun HomeScreen(viewModel: RoomViewModel, studentId: String, paddingValues: Paddi
     Scaffold(
         topBar = {
             SmallTopAppBar(
-                title = { Text("My Booked Rooms") },
-                colors = TopAppBarDefaults.smallTopAppBarColors()
+                title = { Text("My Booked Rooms", color = Color.White) },
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent)
             )
         }
     ) { innerPadding ->
@@ -48,43 +48,43 @@ fun HomeScreen(viewModel: RoomViewModel, studentId: String, paddingValues: Paddi
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(combinedPadding)
                 .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF3064B8),
-                        Color(0xFFAAE5FF)
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF3064B8),
+                            Color(0xFFAAE5FF)
+                        )
                     )
                 )
-            )
                 .padding(combinedPadding)
         ) {
-            val isCompact = maxWidth < 600.dp // Define breakpoint for compact layout
+            val isCompact = maxWidth < 600.dp
 
             if (errorMessage != null) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(text = errorMessage ?: "An error occurred")
+                    Text(text = errorMessage ?: "An error occurred", color = Color.White)
                 }
             } else if (bookingsList.isEmpty()) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("No bookings found")
+                    Text("No bookings found", color = Color.White)
                 }
             } else {
                 if (isCompact) {
-                    CompactLayout(bookingsList) // For smaller screens
+                    CompactLayout(bookingsList)
                 } else {
-                    ExpandedLayout(bookingsList) // For larger screens
+                    ExpandedLayout(bookingsList)
                 }
             }
         }
     }
 }
+
 @Composable
 fun CompactLayout(roomList: List<Room>) {
     LazyColumn(
@@ -104,17 +104,15 @@ fun CompactLayout(roomList: List<Room>) {
                 Box(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // Image covering around 80% of the card
                     AsyncImage(
                         model = room.image_url,
                         contentDescription = "Room Image",
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(200.dp) // Adjust image height
+                            .height(200.dp)
                             .clip(MaterialTheme.shapes.medium)
-                            .align(Alignment.TopCenter) // Align image to top
+                            .align(Alignment.TopCenter)
                     )
-                    // Room ID on the bottom left
                     Text(
                         text = "Room ID: ${room.room_id}",
                         style = MaterialTheme.typography.titleMedium,
@@ -123,7 +121,6 @@ fun CompactLayout(roomList: List<Room>) {
                             .align(Alignment.BottomStart)
                             .padding(16.dp)
                     )
-                    // Status on the bottom right
                     Text(
                         text = "Status: ${room.status}",
                         style = MaterialTheme.typography.bodyMedium,
