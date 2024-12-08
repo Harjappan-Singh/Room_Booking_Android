@@ -1,7 +1,9 @@
 package com.example.roombooking.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -10,59 +12,32 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.roombooking.viewmodel.RoomViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.Preview
-
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun HomeScreen(viewModel: RoomViewModel) {
-//    val roomList by viewModel.roomList.collectAsState()
-//
-//    Scaffold(
-//        topBar = {
-//            SmallTopAppBar(
-//                title = { Text("Booked Rooms") },
-//                colors = TopAppBarDefaults.smallTopAppBarColors()
-//            )
-//        }
-//    ) { innerPadding ->
-//        LazyColumn(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-//            items(roomList) { room ->
-//                ElevatedCard(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = 8.dp)
-//                ) {
-//                    Column(
-//                        modifier = Modifier.padding(16.dp)
-//                    ) {
-//                        Text(text = "Room ID: ${room.id}", style = MaterialTheme.typography.titleMedium)
-//                        Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
+import coil.compose.AsyncImage
+import com.example.roombooking.model.Room
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(viewModel: RoomViewModel, paddingValues: PaddingValues) {
-    // Collect room list state from ViewModel
-    val roomList by viewModel.roomList.collectAsState()
+fun HomeScreen(viewModel: RoomViewModel, studentId: String, paddingValues: PaddingValues) {
+    val bookingsList by viewModel.bookingsList.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
 
-    // Define a loading state
-    val isLoading = roomList.isEmpty()
+    LaunchedEffect(studentId) {
+        viewModel.fetchBookings(studentId)
+    }
 
     Scaffold(
         topBar = {
             SmallTopAppBar(
-                title = { Text("Booked Rooms") },
-                colors = TopAppBarDefaults.smallTopAppBarColors()
+                title = { Text("My Booked Rooms", color = Color.White) },
+                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Transparent)
             )
         }
     ) { innerPadding ->
-        // Merge innerPadding from Scaffold with paddingValues passed to the function
         val combinedPadding = PaddingValues(
             start = innerPadding.calculateStartPadding(LocalLayoutDirection.current) + paddingValues.calculateStartPadding(LocalLayoutDirection.current),
             top = innerPadding.calculateTopPadding() + paddingValues.calculateTopPadding(),
@@ -70,45 +45,142 @@ fun HomeScreen(viewModel: RoomViewModel, paddingValues: PaddingValues) {
             bottom = innerPadding.calculateBottomPadding() + paddingValues.calculateBottomPadding()
         )
 
-        // Show a loading indicator while the data is being fetched
-        if (isLoading) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(combinedPadding),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator() // Show a loading spinner
-            }
-        } else {
-            // Show the room list once the data is available
-            LazyColumn(modifier = Modifier.padding(combinedPadding).padding(16.dp)) {
-                items(roomList) { room ->
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
-                        ) {
-                            Text(text = "Room ID: ${room.id}", style = MaterialTheme.typography.titleMedium)
-                            Text(text = "Status: ${room.status}", style = MaterialTheme.typography.bodyMedium)
-                        }
-                    }
+        BoxWithConstraints(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF3064B8),
+                            Color(0xFFAAE5FF)
+                        )
+                    )
+                )
+                .padding(combinedPadding)
+        ) {
+            val isCompact = maxWidth < 600.dp
+
+            if (errorMessage != null) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = errorMessage ?: "An error occurred", color = Color.White)
+                }
+            } else if (bookingsList.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No bookings found", color = Color.White)
+                }
+            } else {
+                if (isCompact) {
+                    CompactLayout(bookingsList)
+                } else {
+                    ExpandedLayout(bookingsList)
                 }
             }
         }
+    }
+}
 
-        // Optional: Error or empty state message
-        if (roomList.isEmpty() && !isLoading) {
-            Box(
+@Composable
+fun CompactLayout(roomList: List<Room>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        items(roomList) { room ->
+            ElevatedCard(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(combinedPadding),
-                contentAlignment = Alignment.Center
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             ) {
-                Text("No rooms available or error fetching data", style = MaterialTheme.typography.bodyMedium)
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    AsyncImage(
+                        model = room.image_url,
+                        contentDescription = "Room Image",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .align(Alignment.TopCenter)
+                    )
+                    Text(
+                        text = "Room ID: ${room.room_id}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                    )
+                    Text(
+                        text = "Status: ${room.status}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ExpandedLayout(roomList: List<Room>) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        items(roomList) { room ->
+            ElevatedCard(
+                modifier = Modifier
+                    .width(200.dp)
+                    .padding(vertical = 8.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    AsyncImage(
+                        model = room.image_url,
+                        contentDescription = "Room Image",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(140.dp)
+                            .clip(MaterialTheme.shapes.medium)
+                            .align(Alignment.TopCenter)
+                    )
+                    Text(
+                        text = "Room ID: ${room.room_id}",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                    )
+                    Text(
+                        text = "Status: ${room.status}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp)
+                    )
+                }
             }
         }
     }
