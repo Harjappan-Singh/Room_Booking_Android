@@ -65,7 +65,7 @@ fun StudentsScreen(
                 .fillMaxSize()
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            contentPadding = PaddingValues(bottom = 56.dp) // to avoid overlap with the button
+            contentPadding = PaddingValues(bottom = 56.dp)
         ) {
             items(students) { student ->
                 StudentCard(

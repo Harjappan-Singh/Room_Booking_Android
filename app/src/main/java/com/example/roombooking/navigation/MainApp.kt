@@ -123,7 +123,7 @@ fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentVie
             Scaffold(
                 bottomBar = { BottomNavigationBar(navController) }
             ) { contentPadding ->
-                StudentsScreen(studentViewModel = studentViewModel, navController = navController, contentPadding)
+                StudentsScreen(studentViewModel = studentViewModel, navController = navController, paddingValues = contentPadding)
             }
         }
 

@@ -1,28 +1,17 @@
 package com.example.roombooking.view
 
-//import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.foundation.background
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-//import androidx.compose.material3.*
-//import androidx.compose.runtime.Composable
-//import androidx.navigation.NavController
 import com.example.roombooking.navigation.Routes
-
 import androidx.compose.material3.*
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.List
-//import androidx.compose.material.icons.filled.AddBusiness
 import androidx.compose.material.icons.filled.Edit
-//import androidx.compose.material.icons.filled.Group
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 @Composable
@@ -36,9 +25,17 @@ fun BottomNavigationBar(navController: NavController) {
     val darkBlue = Color(0xFF3064B8)
     val lightBlue = Color(0xFFAAE5FF)
 
-    NavigationBar (
-        containerColor = lightBlue,
-        contentColor = Color.White
+    NavigationBar(
+        containerColor = Color.Transparent,
+        contentColor = Color.White,
+        modifier = Modifier.background(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    lightBlue,
+                    darkBlue
+                )
+            )
+        )
     ) {
         items.forEach { (route, icon) ->
             NavigationBarItem(
@@ -50,15 +47,14 @@ fun BottomNavigationBar(navController: NavController) {
                         contentDescription = null
                     )
                 },
-                label = { Text(route.replaceFirstChar { it.uppercase() },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = darkBlue
+                label = {
+                    Text(
+                        route.replaceFirstChar { it.uppercase() },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (navController.currentDestination?.route == route) darkBlue else Color.White
                     )
-                },
-
+                }
             )
         }
     }
 }
-
-
