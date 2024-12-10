@@ -23,7 +23,7 @@ import androidx.navigation.navArgument
 fun MainApp(appViewModel: AppViewModel, roomViewModel: RoomViewModel, studentViewModel: StudentViewModel) {
     val navController = rememberNavController()
     val isAppLoading by appViewModel.isAppLoading.collectAsState()
-    val studentId = studentViewModel.getStudentId() ?: "d00253215"
+    val studentId = studentViewModel.getStudentId() ?: "d00222222"
 
     NavHost(
         navController = navController,

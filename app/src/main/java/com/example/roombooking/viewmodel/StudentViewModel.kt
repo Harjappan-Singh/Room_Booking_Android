@@ -94,8 +94,8 @@ class StudentViewModel(application: Application) : AndroidViewModel(application)
                 uiState.value = uiState.value.copy(
                     studentName = newName,
                     password = newPassword,
-                    isEditing = false,
-                    snackbarMessage = "Profile updated successfully!"
+                    snackbarMessage = "Profile updated successfully!",
+//                    isEditing = false
                 )
             } else {
                 uiState.value = uiState.value.copy(snackbarMessage = "Update failed.")
