@@ -153,7 +153,19 @@ com.example.roombooking
 
 ## Screenshots
 
-<div align="center"> | | | | | |-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------| | [login screen](https://github.com/user-attachments/assets/ead32c31-b325-4be1-a697-8e3e6adbca54) | ![Screenshot_20241210_192528](https://github.com/user-attachments/assets/8595fce3-f5c0-49d8-922b-9e6209bd8770) | ![Screenshot_20241210_192535](https://github.com/user-attachments/assets/a743543d-5cfc-43eb-bc81-f83acaae494c) | ![Screenshot_20241210_192541](https://github.com/user-attachments/assets/f8c96547-336f-4cd9-8e7c-55061cd48b6d) | | ![Screenshot_20241210_192554](https://github.com/user-attachments/assets/d0003c0e-01e4-4b89-a18d-488a0290627e) | ![Screenshot_20241210_192605](https://github.com/user-attachments/assets/1ecc1c79-f6ef-4cbe-a52d-be28832be65e) | ![Screenshot_20241210_192620](https://github.com/user-attachments/assets/1b79749b-f8fe-457e-ad7a-a82c3f52248f) | ![Screenshot_20241210_192625](https://github.com/user-attachments/assets/c48b653f-915c-4f2a-8eae-a6a7e9714fe2) | | ![Screenshot_20241210_192632](https://github.com/user-attachments/assets/bfa70c78-ddb0-4ef2-b45a-ceab4c1190cf) | ![Screenshot_20241210_192640](https://github.com/user-attachments/assets/22e6919e-995e-41c0-9500-f053a4026270) | | | </div>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px;">
+  <img src="https://github.com/user-attachments/assets/1b79749b-f8fe-457e-ad7a-a82c3f52248f" alt="Image 7" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/c48b653f-915c-4f2a-8eae-a6a7e9714fe2" alt="Image 8" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/bfa70c78-ddb0-4ef2-b45a-ceab4c1190cf" alt="Image 9" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/a41dad97-2ed1-40c9-84ab-c281b3b1f21a" alt="Image 1" style="width: 100px; height: auto;">
+   <img src="https://github.com/user-attachments/assets/d0003c0e-01e4-4b89-a18d-488a0290627e" alt="Image 5" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/8595fce3-f5c0-49d8-922b-9e6209bd8770" alt="Image 2" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/a743543d-5cfc-43eb-bc81-f83acaae494c" alt="Image 3" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/f8c96547-336f-4cd9-8e7c-55061cd48b6d" alt="Image 4" style="width: 100px; height: auto;">
+  <img src="https://github.com/user-attachments/assets/1ecc1c79-f6ef-4cbe-a52d-be28832be65e" alt="Image 6" style="width: 100px; height: auto;">
+  
+
+</div>
 
 
 ## Demo
