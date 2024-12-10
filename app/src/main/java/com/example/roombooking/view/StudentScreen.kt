@@ -71,13 +71,16 @@ fun StudentsScreen(
                 StudentCard(
                     student = student,
                     onDelete = {
-                        studentViewModel.deleteStudent {
-                            students = students.filter { it.studentId != student.studentId }
+                        studentViewModel.deleteStudentWithId(student.studentId) { isDeleted ->
+                            if (isDeleted) {
+                                students = students.filter { it.studentId != student.studentId }
+                            }
                         }
                     }
                 )
             }
         }
+
 
         Spacer(modifier = Modifier.weight(1f))
 
